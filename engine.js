@@ -7,37 +7,39 @@
         //     this.bricks;
         this.brick;
         this.paddel;
+        this.ball;
     }
     Engine.prototype = {
         start() {
                 this.iniScreen = document.getElementById("iniScreen");
-                this.iniScreen.addEventListener('mousedown', this);
+                this.iniScreen.addEventListener('touchstart', this);
                 this.canvas = document.getElementById("canvas");
-                this.canvas.addEventListener('mousedown', this);
-                this.canvas.addEventListener('drag', this)
+                this.canvas.addEventListener('touchstart', this);
+                this.canvas.addEventListener('touchmove', this)
             },
             handleEvent(event) {
                 switch (event.type) {
-                case 'mousedown':
+                case 'touchstart':
                     if (event.target.id == "iniScreen") {
                         $("#iniScreen").hide();
                         this.gameInit();
                     } else if (event.target.id == 'canvas') {
-                        this.paddel.updatePosition(event.clientX);
-                        console.log("x:" + (event.clientX));
+                        this.paddel.updatePosition(event.touches[0].clientX);
+                        console.log("x:" + (event.touches[0].clientX));
                     }
                     break;
-                case 'drag':
-                    console.log("draging;")
-
+                case 'touchmove':
+                    this.paddel.updatePosition(event.touches[0].clientX);
                 }
             },
             gameInit() {
                 this.brick = new Brick(this.level);
                 this.paddel = new Paddel();
+                this.ball = new Ball();
                 this.paddel.draw();
                 /*this.bricks =*/
                 this.brick.draw();
+                this.ball.draw();
             },
             draw() {
 
