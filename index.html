@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1">
+    <link rel="stylesheet" href="style.css"></link>
+
+
+    <!-- Inline scripts are forbidden in Firefox OS apps (CSP restrictions),
+         so we use a script file. -->
+    <script src="main.js" defer></script>
+    <script src="engine.js" defer></script>
+    <script src="brick.js" defer></script>
+    <script src="paddel.js" defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+</head>
+
+<body>
+    <!-- This code is in the public domain. Enjoy! -->
+    <canvas id="canvas" width="320" height="520"></canvas>
+    <div id="iniScreen">
+        <div id="message">BrickBreaker!</div>
+        <div id="score">Score:</div>
+        <div id="level">Level:</div>
+        <br style="clear:both" />
+        <div id="clicktoplay">Touch Screen To Play</div>
+    </div>
+</body>
+
+</html>
