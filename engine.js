@@ -9,7 +9,9 @@
         this.paddel;
         this.ball;
         this.animationID;
-        this.life = 3;
+        this.life = 1;
+        this.animateStop = true;
+
     }
     Engine.prototype = {
         start() {
@@ -18,7 +20,7 @@
                 this.canvas = document.getElementById("canvas");
                 this.canvas.addEventListener('touchstart', this);
                 this.canvas.addEventListener('touchmove', this);
-
+                this.animationID = exports.requestAnimationFrame(this.draw.bind(this));
             },
             handleEvent(event) {
                 switch (event.type) {
@@ -37,6 +39,8 @@
                 }
             },
             gameInit() {
+                this.animateStop = false;
+                $("canvas").show();
                 this.brick = new Brick(this.level);
                 this.paddel = new Paddel();
                 this.ball = new Ball();
@@ -44,7 +48,7 @@
                 /*this.bricks =*/
                 this.brick.init();
                 this.ball.draw();
-                this.animationID = exports.requestAnimationFrame(this.draw.bind(this));
+
             },
             detectCollision() {
                 //wall collision
@@ -57,6 +61,13 @@
                 //lose detection
                 if (this.ball.y >= 500) {
                     this.life--;
+                    if (this.life == -1) {
+                        this.life = 3;
+                        this.animateStop = true;
+                        $("#message").value
+                        $("#iniScreen").show();
+                        $("canvas").hide();
+                    }
                     this.ball.init();
                     this.paddel.init();
                 }
@@ -98,10 +109,12 @@
 
             },
             draw() {
-                this.brick.draw();
-                this.paddel.draw();
-                this.ball.updateBall();
-                this.detectCollision();
+                if (!this.animateStop) {
+                    this.brick.draw();
+                    this.paddel.draw();
+                    this.ball.updateBall();
+                    this.detectCollision();
+                }
                 this.animationID = exports.requestAnimationFrame(this.draw.bind(this));
             }
     };

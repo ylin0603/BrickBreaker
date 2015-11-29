@@ -33,16 +33,7 @@
             updateBall() {
                 this.canvas.beginPath();
                 this.canvas.clearRect(this.x - this.radius, this.y - this.radius, (this.radius + 0.5) * 2, (this.radius + 0.5) * 2);
-                /*if (this.vx > 0 && this.vx < 3) {
-                    this.vx = this.vx + 0.01;
-                } else if (this.vx < 0 && this.vx > -3) {
-                    this.vx = this.vx - 0.01;
-                }
-                if (this.vy > 0 && this.vy < 3) {
-                    this.vy = this.vy + 0.01;
-                } else if (this.vy < 0 && this.vy > -3) {
-                    this.vy = this.vy - 0.01;
-                }*/
+                
                 this.x = this.x + this.vx;
                 this.y = this.y - this.vy;
                 this.draw();
