@@ -9,14 +9,20 @@
         this.paddel;
         this.ball;
         this.animationID;
-        this.life = 1;
+        this.life = 3;
+        this.pauseBtn;
         this.animateStop = true;
-
+        $("#pauseScreen").hide();
+        $("#canvasDiv").hide();
     }
     Engine.prototype = {
         start() {
                 this.iniScreen = document.getElementById("iniScreen");
                 this.iniScreen.addEventListener('touchstart', this);
+                this.pauseBtn = document.getElementById("pauseBtn");
+                this.pauseBtn.addEventListener("touchstart", this);
+                this.pauseScreen = document.getElementById("pauseScreen");
+                this.pauseScreen.addEventListener("touchstart", this);
                 this.canvas = document.getElementById("canvas");
                 this.canvas.addEventListener('touchstart', this);
                 this.canvas.addEventListener('touchmove', this);
@@ -31,6 +37,10 @@
                     } else if (event.target.id == 'canvas') {
                         this.paddel.updatePosition(event.touches[0].clientX);
                         //this.paddel.x=event.touches[0].clientX;
+                    } else if (event.target.id == "pauseBtn") {
+                        this.pause();
+                    } else if (event.target.id == "pauseScreen") {
+                        this.pause();
                     }
                     break;
                 case 'touchmove':
@@ -38,9 +48,22 @@
                     //this.paddel.x=event.touches[0].clientX;
                 }
             },
+            clearCanvas() {
+                var c = this.canvas.getContext("2d");
+                c.clearRect(0, 0, 320, 520);
+            },
+            pause() {
+                this.animateStop = !(this.animateStop);
+                if (this.animateStop === true) {
+                    $("#pauseScreen").show();
+                } else {
+                    $("#pauseScreen").hide();
+                }
+            },
             gameInit() {
+                this.clearCanvas();
                 this.animateStop = false;
-                $("canvas").show();
+                $("#canvasDiv").show();
                 this.brick = new Brick(this.level);
                 this.paddel = new Paddel();
                 this.ball = new Ball();
@@ -63,53 +86,74 @@
                     this.life--;
                     if (this.life == -1) {
                         this.life = 3;
+                        this.level = 1;
                         this.animateStop = true;
-                        $("#message").value
+                        $("#message").text("You Lose");
+                        $("#message").css("color", "#32CD32");
                         $("#iniScreen").show();
-                        $("canvas").hide();
+                        $("#canvasDiv").hide();
                     }
                     this.ball.init();
                     this.paddel.init();
                 }
                 //paddel collision
-                if (this.ball.x <= this.paddel.x + this.paddel.paddelWidth && this.ball.x >= this.paddel.x &&
-                    this.ball.y >= this.paddel.y && this.ball.y <= this.paddel.y + 3) { // 3 is the buffer area
+                if (this.ball.x - this.ball.radius <= this.paddel.x + this.paddel.paddelWidth && this.ball.x + this.ball.radius >= this.paddel.x &&
+                    this.ball.y + this.ball.radius >= this.paddel.y && this.ball.y <= this.paddel.y + 3) { // 3 is the buffer area
                     this.ball.vy = -(this.ball.vy);
                     var distanceonPad = this.ball.x - this.paddel.x
                     if (distanceonPad > 30) {
                         this.ball.vx = distanceonPad / 6 - 5;
                     } else if (distanceonPad == 30) {
-                        this.ball.vx = 0.1;
+                        this.ball.vx = 0.2;
                     } else if (distanceonPad < 30) {
                         this.ball.vx = distanceonPad / 6 - 5;
                     }
 
                 }
                 //brick collision
-                for (var i = 0; i < this.brick.row; i++) {
-                    for (var j = 0; j < this.brick.column; j++) {
-                        var temp = this.brick.bricks[i][j];
-                        if (temp.life > 0 && temp.x <= this.ball.x + this.ball.radius &&
-                            (temp.x + this.brick.brickWidth) >= this.ball.x - this.ball.radius &&
-                            temp.y <= this.ball.y - this.ball.radius && temp.y + this.brick.brickHeight >= this.ball.y - this.ball.radius) {
-                            temp.life--;
-                            this.brick.bricksCount--;
-                            if (this.brick.bricksCount == 0) {
-                                this.ball.init();
-                                this.paddel.init();
-                            }
-                            if (temp.life == 0) {
-                                this.brick.canvas.clearRect(temp.x, temp.y, this.brick.brickWidth, this.brick.brickHeight);
-                            }
-                            this.ball.vy = -(this.ball.vy);
+                outerLoop:
+                    for (var i = 0; i < this.brick.row; i++) {
+                        for (var j = 0; j < this.brick.column; j++) {
+                            var temp = this.brick.bricks[i][j];
+                            if (temp.life > 0 && temp.x <= this.ball.x + this.ball.radius &&
+                                (temp.x + this.brick.brickWidth) >= this.ball.x - this.ball.radius &&
+                                temp.y <= this.ball.y - this.ball.radius && temp.y + this.brick.brickHeight >= this.ball.y - this.ball.radius) {
+                                temp.life--;
+                                this.brick.bricksCount--;
+                                if (this.brick.bricksCount == 0) { // win condition
+                                    this.level++;
+                                    $("#message").text("Well Done");
+                                    $("#message").css("color", "#FFD700");
+                                    $("#level").text("Level:" + this.level);
+                                    $("#iniScreen").show();
+                                    this.ball.init();
+                                    this.paddel.init();
+                                    $("#canvasDiv").hide();
+                                    this.animateStop = true;
+                                    break outerLoop;
+                                }
+                                if (temp.life == 0) {
+                                    // this.brick.canvas.clearRect(temp.x, temp.y, this.brick.brickWidth, this.brick.brickHeight);
+                                }
+                                this.ball.vy = -(this.ball.vy);
 
+                            }
                         }
                     }
-                }
 
+            },
+            text() {
+                var c = this.canvas.getContext("2d");
+                c.beginPath();
+                //c.clearRect(285, 0, 40, 20);
+                c.fillStyle = "#FFFAFA";
+                c.font = "12px Courier New, Courier, monospace ";
+                c.fillText("Life:" + this.life, 270, 12);
             },
             draw() {
                 if (!this.animateStop) {
+                    this.clearCanvas();
+                    this.text();
                     this.brick.draw();
                     this.paddel.draw();
                     this.ball.updateBall();

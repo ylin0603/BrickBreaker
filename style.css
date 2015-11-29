@@ -12,32 +12,48 @@ body {
     color: aqua;
 }
 
-canvas {
+#pauseScreen {
+    position: fixed;
+    text-align: center;
+    width: 320px;
+    height: 520px;
+    color: #00EEEE;
+}
+
+#pauseBtn {
+    position: fixed;
+    font-size: 12px;
+    font-family: "Courier New", Courier, monospace;
+    color: #FFFAFA;
+}
+
+#pauseMessage {
+    font-size: 35px;
+    margin-top: 240px;
+    font-family: "Courier New", Courier, monospace;
+}
+
+#canvasDiv {
+    position: fixed;
+    width: 320px;
+    height: 520px;
+}
+
+#canvas {
     position: fixed;
     border: solid "#123456";
 }
 
-#score {
-    position: relative;
-    margin-top: 145px;
-    float: left;
-    margin-left: 20px;
-    font-size: 30px;
-    font-family: sans-serif;
-}
-
 #level {
     text-align: center;
-    float: left;
     margin-top: 145px;
-    margin-left: 70px;
     font-size: 30px;
-    font-family: sans-serif;
+    font-family: "Courier New", Courier, monospace;
 }
 
 #message {
     font-size: 35px;
-    font-family: monospace
+    font-family: "Courier New", Courier, monospace;
 }
 
 #clicktoplay {

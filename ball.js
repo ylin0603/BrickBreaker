@@ -22,7 +22,8 @@
                 //this.canvas.closePath();
             },
             init() {
-                this.canvas.clearRect(this.x - this.radius, this.y - this.radius, (this.radius + 0.5) * 2, (this.radius + 0.5) * 2);
+                this.canvas.beginPath();
+                //this.canvas.clearRect(this.x - this.radius, this.y - this.radius, (this.radius + 0.5) * 2, (this.radius + 0.5) * 2);
                 this.radius = 5;
                 this.mode = 0;
                 this.x = 160;
@@ -32,8 +33,8 @@
             },
             updateBall() {
                 this.canvas.beginPath();
-                this.canvas.clearRect(this.x - this.radius, this.y - this.radius, (this.radius + 0.5) * 2, (this.radius + 0.5) * 2);
-                
+                //this.canvas.clearRect(this.x - this.radius, this.y - this.radius, (this.radius + 0.5) * 2, (this.radius + 0.5) * 2);
+
                 this.x = this.x + this.vx;
                 this.y = this.y - this.vy;
                 this.draw();

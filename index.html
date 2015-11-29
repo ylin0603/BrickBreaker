@@ -15,17 +15,24 @@
     <script src="paddel.js" defer></script>
     <script src="ball.js" defer></script>
     <script src="lib/jquery-1.11.3.min.js"></script>
+    <script src="props.js" defer></script>
 </head>
 
 <body>
     <!-- This code is in the public domain. Enjoy! -->
-    <canvas id="canvas" width="320" height="520"></canvas>
+    <div id="canvasDiv">
+        <canvas id="canvas" width="320" height="520"></canvas>
+        <div id="pauseBtn">Pause</div>
+    </div>
     <div id="iniScreen">
         <div id="message">BrickBreaker!</div>
-        <div id="score">Score:</div>
-        <div id="level">Level:</div>
+        <div id="level">Level: 1</div>
         <br style="clear:both" />
         <div id="clicktoplay">Touch Screen To Play</div>
+    </div>
+    <div id="pauseScreen">
+        <div id="pauseMessage">Pause</div>
+        <div id="pauseWords">Touch To Continue</div>
     </div>
 </body>
 

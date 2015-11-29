@@ -29,6 +29,7 @@
                     this.blankBetweenCanvasy = 15;
                     this.bricks = [];
                     this.bricksCount = this.row * this.column;
+                    //this.bricksCount = 2;
                     for (var i = 0; i < this.row; i++) {
                         this.bricks[i] = []
                         for (var j = 0; j < this.column; j++) {
@@ -50,7 +51,8 @@
                         this.bricks[i][j].y = this.blankBetweenCanvasy +
                             i * (this.blankBetweenBrickY + this.brickHeight);
                         if (this.bricks[i][j].life == 0) {
-                            this.canvas.clearRect(this.bricks[i][j].x, this.bricks[i][j].y, this.brickWidth, this.brickHeight);
+                            //this.canvas.clearRect(this.bricks[i][j].x, this.bricks[i][j].y, this.brickWidth, this.brickHeight);
+                            this.brickCounts--;
                             continue;
                         } else if (this.bricks[i][j].life == 1) {
                             this.canvas.fillStyle = "#9933FF";
@@ -64,7 +66,10 @@
                 }
                 return this.bricks;
             },
-            update() {
+            getBricksCount() {
+                return this.bricksCount;
+            }
+            /*update() {
                 for (var i = 0; i < this.row; i++) {
                     for (var j = 0; j < this.column; j++) {
                         if (this.bricks[i][j].life < 0) {
@@ -73,7 +78,7 @@
                         }
                     }
                 }
-            }
+            }*/
 
     };
     exports.Brick = Brick;

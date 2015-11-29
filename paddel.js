@@ -18,7 +18,7 @@
                 //this.closePath();
             },
             init() {
-                this.canvas.clearRect(this.x, this.y, this.paddelWidth, this.paddelHeight);
+                //  this.canvas.clearRect(this.x, this.y, this.paddelWidth, this.paddelHeight);
                 this.paddelWidth = 60;
                 this.paddelHeight = 10;
                 this.bulletMode = 0;
@@ -31,7 +31,7 @@
 
             },
             updatePosition(x) {
-                this.canvas.clearRect(this.x, this.y, this.paddelWidth, this.paddelHeight); // may cause not smooth animation
+                //  this.canvas.clearRect(this.x, this.y, this.paddelWidth, this.paddelHeight); // may cause not smooth animation
                 // this.canvas.fillStyle = "#ffe4e1";
                 var ltX = x - this.paddelWidth / 2;
                 if (x - this.paddelWidth / 2 + this.paddelWidth > 320) {
