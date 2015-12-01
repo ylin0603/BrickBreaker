@@ -26,17 +26,20 @@
                 this.x = 130;
                 this.y = 450;
             },
-            setWidth(width) {
-                this.paddelWidth = width;
-
+            setWidth(long) {
+                if (this.paddelWidth < 120 && long) {
+                    this.paddelWidth = this.paddelWidth + 20;
+                } else if (this.paddelWidth > 20 && !long) {
+                    this.paddelWidth = this.paddelWidth - 20;
+                }
             },
             updatePosition(x) {
                 //  this.canvas.clearRect(this.x, this.y, this.paddelWidth, this.paddelHeight); // may cause not smooth animation
                 // this.canvas.fillStyle = "#ffe4e1";
                 var ltX = x - this.paddelWidth / 2;
-                if (x - this.paddelWidth / 2 + this.paddelWidth > 320) {
-                    ltX = 260;
-                } else if (x - this.paddelWidth / 2 < 0) {
+                if (ltX + this.paddelWidth > 320) {
+                    ltX = 320 - this.paddelWidth;
+                } else if (ltX < 0) {
                     ltX = 0;
                 }
                 // this.canvas.fillRect(ltX, this.y, this.paddelWidth, this.paddelHeight);

@@ -5,11 +5,11 @@
         this.mode = 0;
         this.x = 160;
         this.y = 440;
-        this.vx = 2.5;
-        this.vy = 2.5;
+        this.vx = 1;
+        this.vy = 1;
         var c = document.getElementById("canvas");
         this.canvas = c.getContext("2d");
-    }
+    };
     Ball.prototype = {
         draw() {
                 this.canvas.beginPath();
@@ -25,11 +25,12 @@
                 this.canvas.beginPath();
                 //this.canvas.clearRect(this.x - this.radius, this.y - this.radius, (this.radius + 0.5) * 2, (this.radius + 0.5) * 2);
                 this.radius = 5;
+                this.radius = 5;
                 this.mode = 0;
                 this.x = 160;
                 this.y = 440;
-                this.vx = 2.5;
-                this.vy = 2.5;
+                this.vx = 1;
+                this.vy = 1;
             },
             updateBall() {
                 this.canvas.beginPath();
@@ -44,6 +45,16 @@
                 if (this.mode == 0) {
 
                 }
+            },
+            setSpeed(is) {
+                if (this.vy < 8 && is) {
+                    this.vy = this.vy * 2;
+                    this.vx = this.vx * 2;
+                } else if (this.vy > 2.5 && !is) {
+                    this.vy = this.vy / 2;
+                    this.vx = this.vx / 2;
+                }
+
             }
 
     };
