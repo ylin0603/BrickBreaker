@@ -157,10 +157,16 @@
                                 console.log("Brick(x,y): " + temp.x + " " + temp.y);
                                 console.log("Ball(x,y): " + this.ball.x + " " + this.ball.y);
                                 temp.life--;
-                                this.brick.bricksCount--;
+                                if (temp.life == 0) {
+                                    this.brick.bricksCount--;
+                                }
                                 if (this.brick.bricksCount == 0) { // win condition
                                     this.level++;
                                     $("#message").text("Well Done");
+                                    if (this.level == 4) {
+                                        $("#message").text("You Win ！ Tap To Play Again");
+                                        this.level = 1;
+                                    }
                                     $("#message").css("color", "#FFD700");
                                     $("#level").text("Level:" + this.level);
                                     $("#iniScreen").show();
@@ -170,17 +176,18 @@
                                     this.animateStop = true;
                                     break outerLoop;
                                 }
-                                if (temp.life == 0) {
-                                    // this.brick.canvas.clearRect(temp.x, temp.y, this.brick.brickWidth, this.brick.brickHeight);
-                                }
+
                                 if (this.ball.x < temp.x && this.ball.y > temp.y && this.ball.y < temp.y + temp.brickHeight) {
                                     this.ball.vx = -(this.ball.vx);
                                 } else if (this.ball.x > temp.x && this.ball.x < temp.x + temp.brickWidth && this.ball.y < temp.y) {
                                     this.ball.vy = -(this.ball.vy);
                                 } else if (this.ball.x > temp.x + temp.brickWidth && this.ball.y > temp.y && this.ball.y < temp.y + temp.brickHeight) {
                                     this.ball.vx = -(this.ball.vx);
+                                } else if (this.ball.x < temp.x + temp.brickWidth && this.ball.x > temp.x && temp.y + temp.brickHeight < this.ball.y) {
+                                    this.ball.vy = -(this.ball.vy);
                                 } else {
                                     this.ball.vy = -(this.ball.vy);
+                                    this.ball.vx = -(this.ball.vx);
                                 }
                             }
                         }
@@ -205,7 +212,7 @@
                     if (this.randomAppear == this.random) {
                         this.randomAppear = 0;
                         var mode = Math.floor(Math.random() * 6);
-                        //var mode = 4;
+                        //var mode = 2;
                         if (mode == 4 && this.random % 5 != 0) {
                             mode = 5;
                         }

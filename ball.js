@@ -47,12 +47,12 @@
                 }
             },
             setSpeed(is) {
-                if (this.vy < 8 && is) {
-                    this.vy = this.vy * 2;
-                    this.vx = this.vx * 2;
-                } else if (this.vy > 2.5 && !is) {
-                    this.vy = this.vy / 2;
-                    this.vx = this.vx / 2;
+                if (this.vy < 6 && is) {
+                    this.vy *= 1.3;
+                    this.vx *= 1.3;
+                } else if (this.vy > 2 && !is) {
+                    this.vy /= 1.3;
+                    this.vx /= 1.3;
                 }
 
             }
