@@ -29,7 +29,7 @@
                 this.canvas = document.getElementById("canvas");
                 this.canvas.addEventListener('touchstart', this);
                 this.canvas.addEventListener('touchmove', this);
-
+                this.animationID = exports.requestAnimationFrame(this.draw.bind(this));
             },
             handleEvent(event) {
                 switch (event.type) {
@@ -67,14 +67,14 @@
                 this.clearCanvas();
                 this.animateStop = false;
                 $("#canvasDiv").show();
-                this.brick = new Brick(2);
+                this.brick = new Brick(this.level);
                 this.paddel = new Paddel();
                 this.ball = new Ball();
                 //this.paddel.draw();
                 /*this.bricks =*/
                 this.brick.init();
                 this.ball.draw();
-                this.animationID = exports.requestAnimationFrame(this.draw.bind(this));
+
             },
             detectCollision() {
                 //wall collision
@@ -120,6 +120,7 @@
                     this.ball.x += this.ball.vx;
                     this.ball.vy = -(this.ball.vy);
                     var distanceonPad = (this.ball.x - this.paddel.x) / this.paddel.paddelWidth;
+                    //var distanceonPad = 1;
                     if (distanceonPad > 0.5) {
                         this.ball.vx = distanceonPad * 10 - 5;
                     } else if (distanceonPad == 0.5) {
@@ -150,9 +151,11 @@
                     for (var i = 0; i < this.brick.bricks.length; i++) {
                         for (var j = 0; j < this.brick.bricks[i].length; j++) {
                             var temp = this.brick.bricks[i][j];
-                            if (temp.life > 0 && temp.x <= this.ball.x + this.ball.radius + this.ball.vx &&
-                                (temp.x + temp.brickWidth) >= this.ball.x - this.ball.radius + this.ball.vx &&
-                                temp.y <= this.ball.y - this.ball.radius - this.ball.vy && temp.y + temp.brickHeight >= this.ball.y - this.ball.radius - this.ball.vy) {
+                            if (temp.life > 0 && temp.x <= this.ball.x + this.ball.vx &&
+                                (temp.x + temp.brickWidth) >= this.ball.x + this.ball.vx &&
+                                temp.y <= this.ball.y - this.ball.vy && temp.y + temp.brickHeight >= this.ball.y - this.ball.vy) {
+                                console.log("Brick(x,y): " + temp.x + " " + temp.y);
+                                console.log("Ball(x,y): " + this.ball.x + " " + this.ball.y);
                                 temp.life--;
                                 this.brick.bricksCount--;
                                 if (this.brick.bricksCount == 0) { // win condition
@@ -170,7 +173,15 @@
                                 if (temp.life == 0) {
                                     // this.brick.canvas.clearRect(temp.x, temp.y, this.brick.brickWidth, this.brick.brickHeight);
                                 }
-                                this.ball.vy = -(this.ball.vy);
+                                if (this.ball.x < temp.x && this.ball.y > temp.y && this.ball.y < temp.y + temp.brickHeight) {
+                                    this.ball.vx = -(this.ball.vx);
+                                } else if (this.ball.x > temp.x && this.ball.x < temp.x + temp.brickWidth && this.ball.y < temp.y) {
+                                    this.ball.vy = -(this.ball.vy);
+                                } else if (this.ball.x > temp.x + temp.brickWidth && this.ball.y > temp.y && this.ball.y < temp.y + temp.brickHeight) {
+                                    this.ball.vx = -(this.ball.vx);
+                                } else {
+                                    this.ball.vy = -(this.ball.vy);
+                                }
                             }
                         }
                     }

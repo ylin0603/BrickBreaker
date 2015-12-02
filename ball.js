@@ -5,8 +5,8 @@
         this.mode = 0;
         this.x = 160;
         this.y = 440;
-        this.vx = 1;
-        this.vy = 1;
+        this.vx = 2;
+        this.vy = 2;
         var c = document.getElementById("canvas");
         this.canvas = c.getContext("2d");
     };
@@ -29,8 +29,8 @@
                 this.mode = 0;
                 this.x = 160;
                 this.y = 440;
-                this.vx = 1;
-                this.vy = 1;
+                this.vx = 2;
+                this.vy = 2;
             },
             updateBall() {
                 this.canvas.beginPath();

@@ -93,6 +93,7 @@
                                 blankBetweenBrickX: 2,
                                 blankBetweenBrickY: 16,
                             }
+                            this.bricksCount += 2;
 
                         }
                     }
