@@ -38,7 +38,7 @@
                     }
                 } else if (this.level === 2) {
                     this.row = 9;
-                    this.column = 7;
+                    this.column = 5;
                     this.brickWidth = 30;
                     this.brickHeight = 10;
                     this.blankBetweenCanvasX = 40;
@@ -54,7 +54,7 @@
                                     life: 2,
                                     brickWidth: 30,
                                     brickHeight: 20,
-                                    blankBetweenBrickX: 2,
+                                    blankBetweenBrickX: 16,
                                     blankBetweenBrickY: 16,
                                 }
                                 //  this.bricksCount += 2;
@@ -72,7 +72,7 @@
                                     life: 2,
                                     brickWidth: 30,
                                     brickHeight: 20,
-                                    blankBetweenBrickX: 162,
+                                    blankBetweenBrickX: 154,
                                     blankBetweenBrickY: 16
                                 }
                                 //  this.bricksCount += 2;
@@ -89,7 +89,7 @@
                                     life: 2,
                                     brickWidth: 30,
                                     brickHeight: 20,
-                                    blankBetweenBrickX: 2,
+                                    blankBetweenBrickX: 16,
                                     blankBetweenBrickY: 16,
                                 }
                                 //  this.bricksCount += 2;

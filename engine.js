@@ -15,6 +15,7 @@
         this.props = new Array();
         this.randomAppear = 0;
         this.random = 300;
+        this.ballMovemet;
         $("#pauseScreen").hide();
         $("#canvasDiv").hide();
     }
@@ -39,7 +40,7 @@
                         this.gameInit();
                     } else if (event.target.id == 'canvas') {
                         this.paddel.updatePosition(event.touches[0].clientX);
-                        //this.paddel.x=event.touches[0].clientX;
+                        this.animateStop = false; //this.paddel.x=event.touches[0].clientX;
                     } else if (event.target.id == "pauseBtn") {
                         this.pause();
                     } else if (event.target.id == "pauseScreen") {
@@ -65,15 +66,18 @@
             },
             gameInit() {
                 this.clearCanvas();
-                this.animateStop = false;
+                this.animateStop = true;
                 $("#canvasDiv").show();
-                this.brick = new Brick(this.level);
+                this.brick = new Brick(2);
                 this.paddel = new Paddel();
                 this.ball = new Ball();
                 //this.paddel.draw();
                 /*this.bricks =*/
                 this.brick.init();
                 this.ball.draw();
+                this.paddel.draw();
+                this.brick.draw();
+                this.text();
 
             },
             detectCollision() {
@@ -87,18 +91,21 @@
                 //lose detection
                 if (this.ball.y >= 500 || this.life <= -1) {
                     this.life--;
+                    this.ball.init();
+                    this.paddel.init();
+                    this.animateStop = true;
                     if (this.life <= -1) {
                         this.life = 3;
                         this.level = 1;
-                        this.animateStop = true;
                         $("#message").text("You Lose");
                         $("#message").css("color", "#32CD32");
                         $("#level").text("Level:" + this.level);
                         $("#iniScreen").show();
                         $("#canvasDiv").hide();
                     }
-                    this.ball.init();
-                    this.paddel.init();
+                    this.drawInit();
+                    return 0;
+
                 }
                 //paddel collision
                 /*if (this.ball.x - this.ball.radius <= this.paddel.x + this.paddel.paddelWidth && this.ball.x + this.ball.radius >= this.paddel.x &&
@@ -164,7 +171,7 @@
                                     this.level++;
                                     $("#message").text("Well Done");
                                     if (this.level == 4) {
-                                        $("#message").text("You Win ！ Tap To Play Again");
+                                        $("#message").text("You Win ！  Tap To Play Again");
                                         this.level = 1;
                                     }
                                     $("#message").css("color", "#FFD700");
@@ -206,6 +213,13 @@
                     this.props[i].updatePos();
                 }
             },
+            drawInit() {
+                this.clearCanvas();
+                this.text();
+                this.brick.draw();
+                this.paddel.draw();
+                this.ball.draw();
+            },
             draw() {
                 if (!this.animateStop) {
                     this.randomAppear++;
@@ -228,8 +242,11 @@
                     this.propsUpdate();
                     this.brick.draw();
                     this.paddel.draw();
-                    this.detectCollision();
-                    this.ball.updateBall();
+                    if (this.detectCollision() != 0) {
+                        this.ball.updateBall();
+                    }
+
+
                 }
                 this.animationID = exports.requestAnimationFrame(this.draw.bind(this));
             }

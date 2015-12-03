@@ -1,7 +1,8 @@
 {
   "name": "BrickBreak",
-  "description": "A Hello World app",
+  "description": "A BrickBreaking Game",
   "launch_path": "/index.html",
+  "type": "privileged",
   "icons": {
     "16": "/icons/icon16x16.png",
     "48": "/icons/icon48x48.png",
@@ -9,7 +10,7 @@
     "128": "/icons/icon128x128.png"
   },
   "developer": {
-    "name": "Your name",
-    "url": "http://example.com"
+    "name": "ylin0603",
+    "url": "https://github.com/ylin0603"
   }
 }
