@@ -20,7 +20,7 @@
         $("#canvasDiv").hide();
     }
     Engine.prototype = {
-        start() {
+        start() { // add the event listener
                 this.iniScreen = document.getElementById("iniScreen");
                 this.iniScreen.addEventListener('touchstart', this);
                 this.pauseBtn = document.getElementById("pauseBtn");
@@ -30,33 +30,42 @@
                 this.canvas = document.getElementById("canvas");
                 this.canvas.addEventListener('touchstart', this);
                 this.canvas.addEventListener('touchmove', this);
+                // start requestion of animation, but not animate yes (animate stop is true now);
                 this.animationID = exports.requestAnimationFrame(this.draw.bind(this));
             },
             handleEvent(event) {
                 switch (event.type) {
                 case 'touchstart':
                     if (event.target.id == "iniScreen") {
+                        //while user touch iniScreen gamestart
                         $("#iniScreen").hide();
                         this.gameInit();
                     } else if (event.target.id == 'canvas') {
+                        // move the paddel
                         this.paddel.updatePosition(event.touches[0].clientX);
+                        // ball start moving
                         this.animateStop = false; //this.paddel.x=event.touches[0].clientX;
                     } else if (event.target.id == "pauseBtn") {
+                        // pause
                         this.pause();
                     } else if (event.target.id == "pauseScreen") {
+                        // recover from pause
                         this.pause();
                     }
                     break;
                 case 'touchmove':
+                    // another way to move the paddel
                     this.paddel.updatePosition(event.touches[0].clientX);
                     //this.paddel.x=event.touches[0].clientX;
                 }
             },
             clearCanvas() {
+                // clean out everything on canvas
                 var c = this.canvas.getContext("2d");
                 c.clearRect(0, 0, 320, 520);
             },
             pause() {
+                // for the pause
                 this.animateStop = !(this.animateStop);
                 if (this.animateStop === true) {
                     $("#pauseScreen").show();
@@ -66,13 +75,17 @@
             },
             gameInit() {
                 this.clearCanvas();
+                // Don't let the ball move while user first enter the game
                 this.animateStop = true;
+                // show the canvas
                 $("#canvasDiv").show();
-                this.brick = new Brick(2);
+                // create the brick with correspond level
+                this.brick = new Brick(this.level);
+                // create paddel
                 this.paddel = new Paddel();
+                // create ball
                 this.ball = new Ball();
-                //this.paddel.draw();
-                /*this.bricks =*/
+                //draw the ini 
                 this.brick.init();
                 this.ball.draw();
                 this.paddel.draw();
@@ -108,19 +121,6 @@
 
                 }
                 //paddel collision
-                /*if (this.ball.x - this.ball.radius <= this.paddel.x + this.paddel.paddelWidth && this.ball.x + this.ball.radius >= this.paddel.x &&
-                    this.ball.y + this.ball.radius >= this.paddel.y && this.ball.y + this.ball.radius <= this.paddel.y + 1) { // 1 is the buffer area
-                    this.ball.vy = -(this.ball.vy);
-                    var distanceonPad = (this.ball.x - this.paddel.x) / this.paddel.paddelWidth;
-                    if (distanceonPad > 0.5) {
-                        this.ball.vx = distanceonPad * 10 - 5;
-                    } else if (distanceonPad == 0.5) {
-                        this.ball.vx = 0.2;
-                    } else if (distanceonPad < 0.5) {
-                        this.ball.vx = distanceonPad * 10 - 5;
-                    }
-
-                }*/
                 if (this.ball.x - this.ball.radius + this.ball.vx <= this.paddel.x + this.paddel.paddelWidth && this.ball.x + this.ball.radius + this.ball.vx >= this.paddel.x &&
                     this.ball.y + this.ball.radius - this.ball.vy >= this.paddel.y && this.ball.y + this.ball.radius <= this.paddel.y) { // 1 is the buffer area
                     this.ball.y += this.ball.vy;
@@ -137,6 +137,7 @@
                     }
 
                 }
+                // catch prop detection
                 for (var i = 0; i < this.props.length; i++) {
                     var p = this.props[i];
                     if (p.x <= this.paddel.x + this.paddel.paddelWidth && p.x >= this.paddel.x &&
@@ -220,23 +221,26 @@
                 this.paddel.draw();
                 this.ball.draw();
             },
+            randomProp() {
+                if (this.randomAppear == this.random) {
+                    this.randomAppear = 0;
+                    var mode = Math.floor(Math.random() * 6);
+                    //var mode = 2;
+                    if (mode == 4 && this.random % 5 != 0) {
+                        mode = 5;
+                    }
+                    var y = Math.floor(Math.random() * 5 + 1);
+                    var p = new Props(mode, this.paddel, this.ball);
+                    p.x = Math.floor(Math.random() * 310 + 2);
+                    p.vy = y;
+                    this.props.push(p);
+                    this.random = Math.floor(Math.random() * 100 + 300);
+                }
+            },
             draw() {
                 if (!this.animateStop) {
                     this.randomAppear++;
-                    if (this.randomAppear == this.random) {
-                        this.randomAppear = 0;
-                        var mode = Math.floor(Math.random() * 6);
-                        //var mode = 2;
-                        if (mode == 4 && this.random % 5 != 0) {
-                            mode = 5;
-                        }
-                        var y = Math.floor(Math.random() * 5 + 1);
-                        var p = new Props(mode, this.paddel, this.ball);
-                        p.x = Math.floor(Math.random() * 310 + 2);
-                        p.vy = y;
-                        this.props.push(p);
-                        this.random = Math.floor(Math.random() * 100 + 300);
-                    }
+                    this.randomProp(this.randomAppear);
                     this.clearCanvas();
                     this.text();
                     this.propsUpdate();

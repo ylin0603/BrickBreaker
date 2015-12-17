@@ -136,6 +136,69 @@
                     }
 
 
+                } else if (this.level === 4) {
+                    this.row = 9;
+                    this.column = 10;
+                    this.blankBetweenCanvasX = 15;
+                    this.blankBetweenCanvasy = 20;
+                    this.bricks = [];
+                    this.bricksCount = 0;
+                    for (var i = 0; i < this.row; i++) {
+                        this.bricks[i] = [];
+                        for (var j = 0; j < this.column; j++) {
+                            this.bricksCount++;
+                            if (i == j) {
+                                this.bricks[i][j] = {
+                                    x: 0,
+                                    y: 0,
+                                    life: 99,
+                                    brickWidth: 20,
+                                    brickHeight: 15,
+                                    blankBetweenBrickX: 10,
+                                    blankBetweenBrickY: 30,
+
+                                }
+                                this.bricksCount--;
+                                continue;
+                            }
+                            if (j % 2 == 0) {
+                                this.bricks[i][j] = {
+                                    x: 0,
+                                    y: 0,
+                                    life: 2,
+                                    brickWidth: 20,
+                                    brickHeight: 15,
+                                    blankBetweenBrickX: 10,
+                                    blankBetweenBrickY: 30,
+
+                                }
+                                continue;
+                            }
+                            if (j == 9) {
+                                this.bricks[i][j] = {
+                                    x: 0,
+                                    y: 0,
+                                    life: 1,
+                                    brickWidth: 20,
+                                    brickHeight: 15,
+                                    blankBetweenBrickX: 10,
+                                    blankBetweenBrickY: 30,
+
+                                }
+                                continue;
+                            }
+                            this.bricks[i][j] = {
+                                x: 0,
+                                y: 0,
+                                life: 3,
+                                brickWidth: 20,
+                                brickHeight: 15,
+                                blankBetweenBrickX: 10,
+                                blankBetweenBrickY: 30,
+                            }
+
+                        }
+                    }
                 }
             },
 
@@ -153,11 +216,11 @@
                         } else if (this.bricks[i][j].life == 1) {
                             this.canvas.fillStyle = "#9933FF";
                         } else if (this.bricks[i][j].life == 2) {
-                            this.canvas.fillStyle = "#EE82EE";
+                            this.canvas.fillStyle = "#0000CD";
                         } else if (this.bricks[i][j].life == 3) {
-                            this.canvas.fillStyle = "#CC99FF";
+                            this.canvas.fillStyle = "#6666FF";
                         } else if (this.bricks[i][j].life > 3) {
-                            this.canvas.fillStyle = "#C0C0C0";
+                            this.canvas.fillStyle = "#FFFFFF";
                         }
                         this.canvas.fillRect(this.bricks[i][j].x, this.bricks[i][j].y, this.bricks[i][j].brickWidth, this.bricks[i][j].brickHeight);
                     }
