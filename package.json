@@ -1,0 +1,16 @@
+{
+  "name": "brickbreaker testing",
+  "version": "0.0.1",
+  "description": "test",
+  "scripts": {
+    "test": "make test"
+  },
+  "author": "ylin",
+  "license": "MPLv2",
+  "dependencies": {
+    "mocha": "~2.3.2",
+    "sinon": "~1.17.2"
+  },
+  "repository":{}
+  
+}
