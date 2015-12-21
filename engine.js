@@ -16,11 +16,12 @@
         this.randomAppear = 0;
         this.random = 300;
         this.ballMovemet;
-        $("#pauseScreen").hide();
-        $("#canvasDiv").hide();
+
     }
     Engine.prototype = {
         start() { // add the event listener
+                $("#pauseScreen").hide();
+                $("#canvasDiv").hide();
                 this.iniScreen = document.getElementById("iniScreen");
                 this.iniScreen.addEventListener('touchstart', this);
                 this.pauseBtn = document.getElementById("pauseBtn");
@@ -93,41 +94,51 @@
                 this.text();
 
             },
-            detectCollision() {
-                //wall collision
+            detectWallCollision() {
+                var isWallCollision = false;
                 if (this.ball.x + this.ball.vx >= 320 || this.ball.x + this.ball.vx <= 0) {
                     this.ball.vx = -(this.ball.vx);
+                    isWallCollision = true;
                 }
                 if (this.ball.y <= 0) {
                     this.ball.vy = -(this.ball.vy);
+                    isWallCollision = true;
                 }
-                //lose detection
-                if (this.ball.y >= 500 || this.life <= -1) {
-                    this.life--;
+                return isWallCollision;
+
+            },
+            detectWinCondition() {
+                if (this.brick.bricksCount == 0) { // win condition
+                    this.level++;
+                    $("#message").text("Well Done");
+                    if (this.level == 4) {
+                        $("#message").text("You Win ！  Tap To Play Again");
+                        this.level = 1;
+                    }
+                    $("#message").css("color", "#FFD700");
+                    $("#level").text("Level:" + this.level);
+                    $("#iniScreen").show();
                     this.ball.init();
                     this.paddel.init();
+                    $("#canvasDiv").hide();
                     this.animateStop = true;
-                    if (this.life <= -1) {
-                        this.life = 3;
-                        this.level = 1;
-                        $("#message").text("You Lose");
-                        $("#message").css("color", "#32CD32");
-                        $("#level").text("Level:" + this.level);
-                        $("#iniScreen").show();
-                        $("#canvasDiv").hide();
-                    }
-                    this.drawInit();
-                    return 0;
-
                 }
-                //paddel collision
+            },
+            detectLoseCondition() {
+                if (this.ball.y >= 500 || this.life <= -1) {
+                    this.life--;
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            detectPaddelCollision() {
                 if (this.ball.x - this.ball.radius + this.ball.vx <= this.paddel.x + this.paddel.paddelWidth && this.ball.x + this.ball.radius + this.ball.vx >= this.paddel.x &&
-                    this.ball.y + this.ball.radius - this.ball.vy >= this.paddel.y && this.ball.y + this.ball.radius <= this.paddel.y) { // 1 is the buffer area
+                    this.ball.y + this.ball.radius - this.ball.vy >= this.paddel.y && this.ball.y + this.ball.radius <= this.paddel.y) { 
                     this.ball.y += this.ball.vy;
                     this.ball.x += this.ball.vx;
                     this.ball.vy = -(this.ball.vy);
                     var distanceonPad = (this.ball.x - this.paddel.x) / this.paddel.paddelWidth;
-                    //var distanceonPad = 1;
                     if (distanceonPad > 0.5) {
                         this.ball.vx = distanceonPad * 10 - 5;
                     } else if (distanceonPad == 0.5) {
@@ -135,9 +146,11 @@
                     } else if (distanceonPad < 0.5) {
                         this.ball.vx = distanceonPad * 10 - 5;
                     }
-
+                    return true;
                 }
-                // catch prop detection
+                return false;
+            },
+            catchProp() {
                 for (var i = 0; i < this.props.length; i++) {
                     var p = this.props[i];
                     if (p.x <= this.paddel.x + this.paddel.paddelWidth && p.x >= this.paddel.x &&
@@ -149,57 +162,68 @@
                             this.life--;
                         }
                         this.props.splice(i, 1);
+                        return true;
                     }
                     if (p.y >= this.paddel.y + 30) {
                         this.props.splice(i, 1);
                     }
                 }
-                //brick collision
-                outerLoop:
-                    for (var i = 0; i < this.brick.bricks.length; i++) {
-                        for (var j = 0; j < this.brick.bricks[i].length; j++) {
-                            var temp = this.brick.bricks[i][j];
-                            if (temp.life > 0 && temp.x <= this.ball.x + this.ball.vx &&
-                                (temp.x + temp.brickWidth) >= this.ball.x + this.ball.vx &&
-                                temp.y <= this.ball.y - this.ball.vy && temp.y + temp.brickHeight >= this.ball.y - this.ball.vy) {
-                                console.log("Brick(x,y): " + temp.x + " " + temp.y);
-                                console.log("Ball(x,y): " + this.ball.x + " " + this.ball.y);
-                                temp.life--;
-                                if (temp.life == 0) {
-                                    this.brick.bricksCount--;
-                                }
-                                if (this.brick.bricksCount == 0) { // win condition
-                                    this.level++;
-                                    $("#message").text("Well Done");
-                                    if (this.level == 4) {
-                                        $("#message").text("You Win ！  Tap To Play Again");
-                                        this.level = 1;
-                                    }
-                                    $("#message").css("color", "#FFD700");
-                                    $("#level").text("Level:" + this.level);
-                                    $("#iniScreen").show();
-                                    this.ball.init();
-                                    this.paddel.init();
-                                    $("#canvasDiv").hide();
-                                    this.animateStop = true;
-                                    break outerLoop;
-                                }
+                return false;
+            },
+            detectBrickCollision() {
+                outerLoop: for (var i = 0; i < this.brick.bricks.length; i++) {
+                    for (var j = 0; j < this.brick.bricks[i].length; j++) {
+                        var temp = this.brick.bricks[i][j];
+                        if (temp.life > 0 && temp.x <= this.ball.x + this.ball.vx &&
+                            (temp.x + temp.brickWidth) >= this.ball.x + this.ball.vx &&
+                            temp.y <= this.ball.y - this.ball.vy && temp.y + temp.brickHeight >= this.ball.y - this.ball.vy) {
+                            temp.life--;
+                            if (temp.life == 0) {
+                                this.brick.bricksCount--;
+                            }
 
-                                if (this.ball.x < temp.x && this.ball.y > temp.y && this.ball.y < temp.y + temp.brickHeight) {
-                                    this.ball.vx = -(this.ball.vx);
-                                } else if (this.ball.x > temp.x && this.ball.x < temp.x + temp.brickWidth && this.ball.y < temp.y) {
-                                    this.ball.vy = -(this.ball.vy);
-                                } else if (this.ball.x > temp.x + temp.brickWidth && this.ball.y > temp.y && this.ball.y < temp.y + temp.brickHeight) {
-                                    this.ball.vx = -(this.ball.vx);
-                                } else if (this.ball.x < temp.x + temp.brickWidth && this.ball.x > temp.x && temp.y + temp.brickHeight < this.ball.y) {
-                                    this.ball.vy = -(this.ball.vy);
-                                } else {
-                                    this.ball.vy = -(this.ball.vy);
-                                    this.ball.vx = -(this.ball.vx);
-                                }
+
+                            if (this.ball.x < temp.x && this.ball.y > temp.y && this.ball.y < temp.y + temp.brickHeight) {
+                                this.ball.vx = -(this.ball.vx);
+                            } else if (this.ball.x > temp.x && this.ball.x < temp.x + temp.brickWidth && this.ball.y < temp.y) {
+                                this.ball.vy = -(this.ball.vy);
+                            } else if (this.ball.x > temp.x + temp.brickWidth && this.ball.y > temp.y && this.ball.y < temp.y + temp.brickHeight) {
+                                this.ball.vx = -(this.ball.vx);
+                            } else if (this.ball.x < temp.x + temp.brickWidth && this.ball.x > temp.x && temp.y + temp.brickHeight < this.ball.y) {
+                                this.ball.vy = -(this.ball.vy);
+                            } else {
+                                this.ball.vy = -(this.ball.vy);
+                                this.ball.vx = -(this.ball.vx);
                             }
                         }
                     }
+                }
+            },
+            detectCollision() {
+                //lose detection
+                this.detectWallCollision();
+                if (this.detectLoseCondition()) {
+                    this.ball.init();
+                    this.paddel.init();
+                    this.animateStop = true;
+                    this.drawInit();
+                    if (this.life <= -1) {
+                        this.life = 3;
+                        this.level = 1;
+                        $("#message").text("You Lose");
+                        $("#message").css("color", "#32CD32");
+                        $("#level").text("Level:" + this.level);
+                        $("#iniScreen").show();
+                        $("#canvasDiv").hide();
+                    }
+                }
+                //paddel collision
+                this.detectPaddelCollision();
+                // catch prop detection
+                this.catchProp();
+                //brick collision
+                this.detectBrickCollision();
+                this.detectWinCondition();
             },
             text() {
                 var c = this.canvas.getContext("2d");

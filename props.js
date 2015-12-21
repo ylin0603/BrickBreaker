@@ -9,8 +9,6 @@
         this.vx = 3.5;
         this.vy = 3.5;
         this.radius = 6;
-        var c = document.getElementById("canvas");
-        this.canvas = c.getContext("2d");
     }
     Props.prototype = {
         init() {
@@ -19,6 +17,8 @@
                 this.radius = 6;
             },
             draw() {
+                var c = document.getElementById("canvas");
+                this.canvas = c.getContext("2d");
                 this.canvas.beginPath();
                 this.canvas.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
                 if (this.mode == "0") {
@@ -39,8 +39,6 @@
                     this.canvas.lineWidth = 3;
                     this.canvas.stroke();
                 }
-
-
                 this.canvas.fill();
             },
             updatePos() {
@@ -48,11 +46,8 @@
                 this.y = this.y + this.vy;
                 this.draw();
             },
-            randomProps() {
-
-            },
             catchProp() {
-                this.canvas.clearRect(0, 450, 320, 600);
+                //this.canvas.clearRect(0, 450, 320, 600);
                 if (this.mode == "0") {
                     this.paddel.setWidth(1);
                 } else if (this.mode == "1") {

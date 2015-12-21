@@ -2,8 +2,6 @@
 (function (exports) {
     var Brick = function (_level) {
         this.level = _level;
-        this.c = document.getElementById("canvas");
-        this.canvas = this.c.getContext("2d");
         // brick information
         this.row;
         this.column;
@@ -203,6 +201,8 @@
             },
 
             draw() {
+                this.c = document.getElementById("canvas");
+                this.canvas = this.c.getContext("2d");
                 this.canvas.beginPath();
                 for (var i = 0; i < this.bricks.length; i++) {
                     for (var j = 0; j < this.bricks[i].length; j++) {
