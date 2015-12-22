@@ -230,17 +230,6 @@
             getBricksCount() {
                 return this.bricksCount;
             }
-            /*update() {
-                for (var i = 0; i < this.row; i++) {
-                    for (var j = 0; j < this.column; j++) {
-                        if (this.bricks[i][j].life < 0) {
-                            this.canvas.clearRect(this.bricks[i][j].x, this.bricks[i][j].y, this.brickWidth, this.brickHeight);
-                            continue;
-                        }
-                    }
-                }
-            }*/
-
     };
     exports.Brick = Brick;
 

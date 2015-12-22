@@ -48,5 +48,16 @@ describe('Basic Functionality', function () {
             engine.props.push(prop);
             assert.equal(true, engine.catchProp());
         })
+        it('propNotCatched', function () {
+            var engine = new Engine();
+            engine.paddel = new Paddel();
+            engine.ball = new Ball();
+            var prop = new Props(1, engine.paddel, engine.ball);
+            prop.y = 520;
+            prop.x = 130;
+            engine.props.push(prop);
+            engine.catchProp();
+            assert.equal(0, engine.props.length);
+        })
     })
 })

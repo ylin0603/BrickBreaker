@@ -134,7 +134,7 @@
             },
             detectPaddelCollision() {
                 if (this.ball.x - this.ball.radius + this.ball.vx <= this.paddel.x + this.paddel.paddelWidth && this.ball.x + this.ball.radius + this.ball.vx >= this.paddel.x &&
-                    this.ball.y + this.ball.radius - this.ball.vy >= this.paddel.y && this.ball.y + this.ball.radius <= this.paddel.y) { 
+                    this.ball.y + this.ball.radius - this.ball.vy >= this.paddel.y && this.ball.y + this.ball.radius <= this.paddel.y) {
                     this.ball.y += this.ball.vy;
                     this.ball.x += this.ball.vx;
                     this.ball.vy = -(this.ball.vy);
@@ -199,7 +199,7 @@
                     }
                 }
             },
-            detectCollision() {
+            collisionManager() {
                 //lose detection
                 this.detectWallCollision();
                 if (this.detectLoseCondition()) {
@@ -270,7 +270,7 @@
                     this.propsUpdate();
                     this.brick.draw();
                     this.paddel.draw();
-                    if (this.detectCollision() != 0) {
+                    if (this.collisionManager() != 0) {
                         this.ball.updateBall();
                     }
 
